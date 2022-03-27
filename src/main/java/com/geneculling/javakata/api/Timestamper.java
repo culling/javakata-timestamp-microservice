@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import java.util.Date;
 
 public interface Timestamper {
-    JsonElement getJsonFromDate(Date date);
+    JsonObject getJsonFromDate(Date date);
 
     static Date getDateFromMillisecondsString(String string) {
         try {

@@ -34,12 +34,27 @@ public class TimestamperImplTest {
     }
 
     @Test
-    public void timestamperShouldReturnValidJsonFromDate(){
+    public void timestamperShouldReturnValidJsonFromDate_unix(){
+        Date date = new Date(1451001600000l);
+        Timestamper timestamper = new TimestamperImpl();
+        JsonObject json = timestamper.getJsonFromDate(date);
+        assertEquals(1451001600000l, json.get("unix").getAsLong());
+    }
+
+    @Test
+    public void timestamperShouldReturnValidJsonFromDate_utc(){
         Date date = new Date(1451001600000l);
         Timestamper timestamper = new TimestamperImpl();
         JsonElement json = timestamper.getJsonFromDate(date);
-        assertEquals(1451001600000l, json.getAsJsonObject().get("unix").getAsLong());
         assertEquals("Fri, 25 Dec 2015 00:00:00 GMT", json.getAsJsonObject().get("utc").getAsString());
     }
 
+    @Test
+    public void getUtcString(){
+        Date date = new Date(1451001600000l);
+        String utc = TimestamperImpl.getUtcString(date);
+        assertEquals("Fri, 25 Dec 2015 00:00:00 GMT", utc);
+    }
+
 }
+
