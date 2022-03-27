@@ -21,8 +21,12 @@
         <context>timestamp-microservice</context>
     </web-resource>
 
-    <servlet key="timestamper-servlet" class="com.geneculling.javakata.impl.TimestamperServlet">
+    <servlet key="timestamper-api-servlet" class="com.geneculling.javakata.servlets.TimestamperApiServlet">
         <url-pattern>/timestamper/api</url-pattern>
+    </servlet>
+
+    <servlet key="timestamper-servlet" class="com.geneculling.javakata.servlets.TimestamperServlet">
+        <url-pattern>/timestamper/api/*</url-pattern>
     </servlet>
 
 
