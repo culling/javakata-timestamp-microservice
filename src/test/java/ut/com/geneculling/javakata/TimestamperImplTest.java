@@ -28,6 +28,18 @@ public class TimestamperImplTest {
     }
 
     @Test
+    public void timestamperInterfaceShouldReturnNullFromInvalidString(){
+        Date date = Timestamper.getDateFromMillisecondsString("Apples");
+        assertEquals(date, null);
+    }
+
+    @Test
+    public void timestamperInterfaceShouldCreateDateFromValidMillisecondsString_1(){
+        Date date = Timestamper.getDateFromMillisecondsString("-1");
+        assertEquals(date, new Date(-1l));
+    }
+
+    @Test
     public void timestamperInterfaceShould_Not_CreateDateFromInvalidMillisecondsString(){
         Date date = Timestamper.getDateFromMillisecondsString("");
         assertEquals(date, null);
@@ -50,10 +62,25 @@ public class TimestamperImplTest {
     }
 
     @Test
-    public void getUtcString(){
+    public void timestamperShouldReturnValidJsonFromDate_utc_2(){
+        Date date = new Date(1648449000000l);
+        Timestamper timestamper = new TimestamperImpl();
+        JsonElement json = timestamper.getJsonFromDate(date);
+        assertEquals("Mon, 28 Mar 2022 06:30:00 GMT", json.getAsJsonObject().get("utc").getAsString());
+    }
+
+    @Test
+    public void getUtcString_1(){
         Date date = new Date(1451001600000l);
         String utc = TimestamperImpl.getUtcString(date);
         assertEquals("Fri, 25 Dec 2015 00:00:00 GMT", utc);
+    }
+
+    @Test
+    public void getUtcString_2(){
+        Date date = new Date(1648449000000l);
+        String utc = TimestamperImpl.getUtcString(date);
+        assertEquals("Mon, 28 Mar 2022 06:30:00 GMT", utc);
     }
 
 }
