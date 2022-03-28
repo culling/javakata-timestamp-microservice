@@ -28,9 +28,12 @@ public class TimestamperServlet extends HttpServlet {
         log.debug("Embed Servlet received request");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        Date date = new Date();
+        if(!request.getPathInfo().equals("/timestamper/api")) {
+            String cleanString = cleanDateFromPath("/timestamper/api", request.getPathInfo());
+            date = Timestamper.getDateFromMillisecondsString(cleanString);
+        }
 
-        String cleanString = cleanDateFromPath(request.getPathInfo());
-        Date date = Timestamper.getDateFromMillisecondsString(cleanString);
         if(null == date){
             response.getWriter().write("{ \"error\": \"Invalid Date\" }");
             response.flushBuffer();
@@ -43,7 +46,8 @@ public class TimestamperServlet extends HttpServlet {
         response.flushBuffer();
     }
 
-    private String cleanDateFromPath(String rawDate){
+    private String cleanDateFromPath(String path, String rawString){
+        String rawDate = rawString.substring(path.length());
         return rawDate.substring(1);
     }
 

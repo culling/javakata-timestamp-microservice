@@ -6,7 +6,7 @@ describe("canary", () => {
     })
 })
 
-describe('get from rest endpoint', () => {
+describe('valid requests and responses from timestamper/api/:date?', () => {
     it("should get a valid response from timestamper/api/1451001600000", () => {
         const endpointUrl = Cypress.config().baseUrl + "/plugins/servlet/timestamper/api/1451001600000"
         cy.request(endpointUrl).then(response => {
@@ -25,6 +25,26 @@ describe('get from rest endpoint', () => {
         });
     });
 
+});
+
+describe('Empty time request from timestamper/api', ()=>{
+    it("should get current time and date as response from timestamper/api ", () => {
+        const endpointUrl = Cypress.config().baseUrl + "/plugins/servlet/timestamper/api";
+        const milliseconds = new Date().getTime();
+        const overlapTime = (1 * 60 * 1000);
+        cy.request(endpointUrl).then(response => {
+            const body = response.body;
+            expect(body.unix).to.be.greaterThan(milliseconds - overlapTime);
+            expect(body.unix).to.be.lessThan(milliseconds + overlapTime);
+
+            expect(body.utc).to.equal((new Date(milliseconds)).toUTCString()); // Could flake, but an auto retry should resolve the issue
+            expect(body.error).to.equal(undefined);
+        });
+    });
+});
+
+
+describe('invalid requests and responses from timestamper/api/:invalid_request?', ()=>{
     it("should get an error response from timestamper/api/apples ", () => {
         const endpointUrl = Cypress.config().baseUrl + "/plugins/servlet/timestamper/api/apples"
         cy.request(endpointUrl).then(response => {
@@ -35,3 +55,4 @@ describe('get from rest endpoint', () => {
         });
     });
 });
+
