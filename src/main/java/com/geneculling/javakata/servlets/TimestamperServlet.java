@@ -26,9 +26,16 @@ public class TimestamperServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.debug("Embed Servlet received request");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         String cleanString = cleanDateFromPath(request.getPathInfo());
         Date date = Timestamper.getDateFromMillisecondsString(cleanString);
+        if(null == date){
+            response.getWriter().write("{ \"error\": \"Invalid Date\" }");
+            response.flushBuffer();
+            return;
+        }
         Timestamper timestamper =  new TimestamperImpl();
         JsonObject jsonObject = timestamper.getJsonFromDate(date);
         String json = GSON.toJson(jsonObject);
